@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscripción de Inglés</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 min-h-screen flex items-center justify-center p-4 font-sans text-slate-800">
+
+  <div class="max-w-md w-full bg-white p-6 rounded-2xl shadow-lg border border-slate-200 space-y-4">
+    <div class="text-center border-b pb-3">
+      <h1 class="text-xl font-bold text-indigo-700">Inscripción de Inglés</h1>
+      <p class="text-xs text-slate-500">Completa tus datos para registrarte</p>
+    </div>
+
+    <!-- Cartel de éxito -->
+    <div id="success-message" class="hidden bg-emerald-50 border border-emerald-200 text-emerald-800 p-4 rounded-xl text-center text-sm font-medium">
+      🎉 ¡Inscripción registrada con éxito! Puedes cerrar esta pestaña.
+    </div>
+
+    <!-- Formulario de Inscripción -->
+    <form id="student-form" class="space-y-4">
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Nombre y Apellido</label>
+        <input type="text" name="nombre" required placeholder="Ej. Sofía Martínez" class="w-full px-3 py-2 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Número de Celular / WhatsApp</label>
+        <input type="tel" name="telefono" required placeholder="Ej. +5492911234567" class="w-full px-3 py-2 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+        <span class="text-[10px] text-slate-400">Incluye código de área para contacto directo.</span>
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Nivel de Inglés</label>
+        <select name="nivel" required class="w-full px-3 py-2 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+          <option value="A1 (Principiante)">A1 - Principiante</option>
+          <option value="A2 (Básico)">A2 - Básico</option>
+          <option value="B1 (Intermedio)">B1 - Intermedio</option>
+          <option value="B2 (Intermedio Alto)">B2 - Intermedio Alto</option>
+          <option value="C1 (Avanzado)">C1 - Avanzado</option>
+          <option value="C2 (Maestría)">C2 - Maestría</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Tipo de Cursado</label>
+        <select name="cursado" required class="w-full px-3 py-2 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+          <option value="Normal">Normal</option>
+          <option value="Libre">Libre</option>
+          <option value="A Elección">A Elección</option>
+          <option value="Con Diploma">Con Diploma</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Modalidad de Clase</label>
+        <div class="flex gap-4 pt-1">
+          <label class="flex items-center gap-2 cursor-pointer text-sm">
+            <input type="radio" name="modalidad" value="Grupal" checked class="text-indigo-600 focus:ring-indigo-500"> Grupal
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer text-sm">
+            <input type="radio" name="modalidad" value="Individual" class="text-indigo-600 focus:ring-indigo-500"> Individual
+          </label>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Institución Actual</label>
+        <input type="text" name="institucion" required placeholder="Ej. Colegio / Universidad / Trabajo" class="w-full px-3 py-2 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+      </div>
+
+      <button type="submit" id="submit-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl shadow transition">
+        Enviar Registro
+      </button>
+    </form>
+  </div>
+
+  <script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxTOb7FcMg01bLqwI7mejs10nrJiYbsC0gNtL10sbynWhGSaIVntJL8DGJ8uwyawBQZ4w/exec';
+    const form = document.getElementById('student-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const successMsg = document.getElementById('success-message');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+
+      submitBtn.disabled = true;
+      submitBtn.innerText = 'Enviando...';
+
+      fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+        .then(response => {
+          form.reset();
+          form.classList.add('hidden');
+          successMsg.classList.remove('hidden');
+
+          submitBtn.disabled = false;
+          submitBtn.innerText = 'Enviar Registro';
+
+          setTimeout(() => {
+            form.classList.remove('hidden');
+            successMsg.classList.add('hidden');
+          }, 4000);
+        })
+        .catch(error => {
+          console.error('Error!', error.message);
+          alert('Hubo un error al guardar el registro. Por favor, intenta de nuevo.');
+          submitBtn.disabled = false;
+          submitBtn.innerText = 'Enviar Registro';
+        });
+    });
+  </script>
+</body>
+</html>
